@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package fxp_caffe;
+
+//fixed point parameters
+message QuantizationParameter{
+  optional bool fixed_point_training = 5 [default = true];
+  optional int32 layer_bit_depth = 2 [default = 16];
+  optional int32 weight_bit_depth = 1 [default = 16];
+  enum QuantizeAlgorithm{
+    ALG_MSE = 0;
+    ALG_MAX = 1;
+    ALG_HIST_MAX = 2;
+  }
+  optional QuantizeAlgorithm weight_quantization_algorithm = 3 [default = ALG_MAX];
+  optional QuantizeAlgorithm layer_quantization_algorithm = 4 [default = ALG_MSE];
+  
+}
+
+message layerParameter{
+  optional string name = 1 [default = ""];
+  optional string type = 2 [default = ""];
+  optional QuantizationParameter quantization_param = 3;
+}
+
+message netParameter{
+  repeated layerParameter layer = 1;
+}
